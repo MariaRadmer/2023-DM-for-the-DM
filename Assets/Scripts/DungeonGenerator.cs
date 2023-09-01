@@ -80,7 +80,7 @@ public class DungeonGenerator : MonoBehaviour
 
     public int[,] GenerateDungeon()
     {
-        Debug.Log("Generate in dungeonGenerator!");
+        
 
         dungeonInit();
 

@@ -21,7 +21,7 @@ public class Controller : MonoBehaviour
 
     public int[,] GenerateNewDungeon()
     {
-        Debug.Log("Generate in Controller!");
+        
         return model.GenerateDungeon();
     }
 }

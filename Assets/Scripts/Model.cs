@@ -23,7 +23,7 @@ public class Model : MonoBehaviour
 
     public int[,] GenerateDungeon()
     {
-        Debug.Log("Generatein Model!");
+        
         int[,] dungeonArr = dungeonGenerator.GenerateDungeon();
         return dungeonArr;
     }
