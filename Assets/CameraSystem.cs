@@ -11,6 +11,9 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera virtualCamera;
     [SerializeField] float movementSpeed = 30f;
     [SerializeField] float dragPanSpeed = 10f;
+    float movementMin = -10f;
+    float movementMax = 10f;
+
     [SerializeField] float edgeScrollSize = 20f;
     [SerializeField] float zoomMin = 10f;
     [SerializeField] float zoomMax = 50f;
@@ -30,14 +33,21 @@ public class CameraSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Movement
+        
         HandleCameraMovement();
-        EdgeScrolling();
+        //EdgeScrolling();
         DragPan();
         Zoom();
 
     }
 
+    public void UpdateParameters(DungeonParams dungeonParams)
+    {
+        movementMin = - dungeonParams.tileMapSize / 2;
+        movementMax = dungeonParams.tileMapSize / 2;
+        Debug.Log("map size " + dungeonParams.tileMapSize);
+
+    }
 
 
     private void HandleCameraMovement()
@@ -53,7 +63,15 @@ public class CameraSystem : MonoBehaviour
 
         Vector3 moveDirection = transform.up * inputDirection.y + transform.right * inputDirection.x;
 
-        transform.position += moveDirection * movementSpeed * Time.deltaTime;
+        
+
+        Vector3 target = transform.position + moveDirection * movementSpeed * Time.deltaTime;
+        target.x = Mathf.Clamp(target.x, movementMin, movementMax);
+        target.y = Mathf.Clamp(target.y, movementMin, movementMax);
+
+
+        transform.position = target;
+
     }
 
 
@@ -68,7 +86,14 @@ public class CameraSystem : MonoBehaviour
 
         Vector3 moveDirection = transform.up * inputDirection.y + transform.right * inputDirection.x;
 
-        transform.position += moveDirection * movementSpeed * Time.deltaTime;
+        Vector3 target = transform.position + moveDirection * movementSpeed * Time.deltaTime;
+        target.x = Mathf.Clamp(target.x, movementMin, movementMax);
+        target.y = Mathf.Clamp(target.y, movementMin, movementMax);
+
+
+        transform.position = target;
+
+        
     }
 
     private void DragPan()
@@ -97,7 +122,14 @@ public class CameraSystem : MonoBehaviour
         }
         Vector3 moveDirection = transform.up * inputDirection.y + transform.right * inputDirection.x;
 
-        transform.position += moveDirection * movementSpeed * Time.deltaTime;
+        Vector3 target = transform.position + moveDirection * movementSpeed * Time.deltaTime;
+        target.x = Mathf.Clamp(target.x, movementMin, movementMax);
+        target.y = Mathf.Clamp(target.y, movementMin, movementMax);
+
+
+        transform.position = target;
+
+       
     }
 
     private void Zoom()

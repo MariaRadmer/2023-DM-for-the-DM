@@ -21,10 +21,10 @@ public class Model : MonoBehaviour
         
     }
 
-    public int[,] GenerateDungeon()
+    public int[,] GenerateDungeon(DungeonParams dungeonParams)
     {
         
-        int[,] dungeonArr = dungeonGenerator.GenerateDungeon();
+        int[,] dungeonArr = dungeonGenerator.GenerateDungeon(dungeonParams);
         return dungeonArr;
     }
 

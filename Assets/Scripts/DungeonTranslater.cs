@@ -12,16 +12,12 @@ public class DungeonTranslater : MonoBehaviour
     [SerializeField]
     TileBase grasstile;
 
-    [SerializeField]
-    Tilemap TilemapGroudBorder;
-    [SerializeField]
-    TileBase bordertile;
+
 
     [SerializeField]
-    int borderFactor;
+    private int borderFactor = 4;
 
-    [SerializeField]
-    string text;
+
 
     
 
@@ -46,7 +42,7 @@ public class DungeonTranslater : MonoBehaviour
     void readFromTextFile()
     {
 
-        string path = Application.dataPath + "/Dungeons" + "/Dungeon" +text+ ".txt";
+        string path = Application.dataPath + "/Dungeons" + "/Dungeon"+ ".txt";
 
         int[,] dungeonArr = convertToArray(path);
 
@@ -72,25 +68,18 @@ public class DungeonTranslater : MonoBehaviour
             }
         }
 
-        fillBorder(dungeonArr.GetLength(0), dungeonArr.GetLength(1));
+       
 
     }
 
-    void fillBorder(int endX, int endY)
-    {
-        Vector3Int start = new Vector3Int(0, 0, 0);
 
-        resetBorders(TilemapGroudBorder, endX,endY);
-        
-        TilemapGroudBorder.FloodFill(start, bordertile);
-    }
 
     void resetBorders(Tilemap map, int width,int height)
     {
-        map.origin = new Vector3Int(-width/2 * borderFactor, -height/2 * borderFactor, 0);
-        map.size = new Vector3Int(width* borderFactor, height* borderFactor);
+        map.origin = new Vector3Int(-width / 2 * borderFactor, -height / 2 * borderFactor, 0);
+        map.size = new Vector3Int(width * borderFactor, height * borderFactor);
         map.ResizeBounds();
-        
+
     }
 
     int[,] convertToArray(string path)
@@ -205,10 +194,9 @@ public class DungeonTranslater : MonoBehaviour
 
     }
 
-    public void UpdateDungeonLayout(int[,] dungeonArr)
+    public void UpdateDungeonLayout(int[,] dungeonArr, DungeonParams dungeonParams)
     {
         TilemapGround.ClearAllTiles();
-        TilemapGroudBorder.ClearAllTiles();
         int width = dungeonArr.GetLength(0);
         int height = dungeonArr.GetLength(1);
 
@@ -231,6 +219,6 @@ public class DungeonTranslater : MonoBehaviour
             }
         }
 
-        fillBorder(dungeonArr.GetLength(0), dungeonArr.GetLength(1));
+        
     }
 }
