@@ -8,6 +8,9 @@ public class DungeonParams
     public int tileMapSize {get; }
     public int nbrOfStepsDungeons { get; }
 
+
+
+
     public DungeonParams (int tileMapSize, int nbrOfStepsDungeons)
     {
         this.tileMapSize = tileMapSize;

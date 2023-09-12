@@ -11,8 +11,7 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera virtualCamera;
     [SerializeField] float movementSpeed = 30f;
     [SerializeField] float dragPanSpeed = 10f;
-    float movementMin = -10f;
-    float movementMax = 10f;
+    
 
     [SerializeField] float edgeScrollSize = 20f;
     [SerializeField] float zoomMin = 10f;
@@ -43,10 +42,16 @@ public class CameraSystem : MonoBehaviour
 
     public void UpdateParameters(DungeonParams dungeonParams)
     {
-        movementMin = - dungeonParams.tileMapSize / 2;
-        movementMax = dungeonParams.tileMapSize / 2;
-        Debug.Log("map size " + dungeonParams.tileMapSize);
+        
+        
 
+    }
+
+
+    public void UpdateCameraPosition(Vector3Int startDungeonPosition) {
+
+
+        transform.position = startDungeonPosition;
     }
 
 
@@ -66,8 +71,7 @@ public class CameraSystem : MonoBehaviour
         
 
         Vector3 target = transform.position + moveDirection * movementSpeed * Time.deltaTime;
-        target.x = Mathf.Clamp(target.x, movementMin, movementMax);
-        target.y = Mathf.Clamp(target.y, movementMin, movementMax);
+       
 
 
         transform.position = target;
@@ -87,8 +91,7 @@ public class CameraSystem : MonoBehaviour
         Vector3 moveDirection = transform.up * inputDirection.y + transform.right * inputDirection.x;
 
         Vector3 target = transform.position + moveDirection * movementSpeed * Time.deltaTime;
-        target.x = Mathf.Clamp(target.x, movementMin, movementMax);
-        target.y = Mathf.Clamp(target.y, movementMin, movementMax);
+        
 
 
         transform.position = target;
@@ -123,8 +126,7 @@ public class CameraSystem : MonoBehaviour
         Vector3 moveDirection = transform.up * inputDirection.y + transform.right * inputDirection.x;
 
         Vector3 target = transform.position + moveDirection * movementSpeed * Time.deltaTime;
-        target.x = Mathf.Clamp(target.x, movementMin, movementMax);
-        target.y = Mathf.Clamp(target.y, movementMin, movementMax);
+        
 
 
         transform.position = target;

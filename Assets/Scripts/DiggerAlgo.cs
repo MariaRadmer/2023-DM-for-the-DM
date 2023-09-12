@@ -32,8 +32,11 @@ public class DiggerAlgo
     int dungeonCol;
     int dungeonRow;
 
-    (int, int) starPos;
+    (int, int) startPos;
     (int, int) endPos;
+
+    Vector3Int top = new Vector3Int(1,1);
+    Vector3Int bottom = new Vector3Int(1,1);
 
     public DiggerAlgo() {
         dirToXY.Add(DIRECTION.UP, (1, 0));
@@ -42,7 +45,11 @@ public class DiggerAlgo
         dirToXY.Add(DIRECTION.LEFT, (0, -1));
     }
 
-
+    public (int,int) getStartPosition()
+    {
+        Debug.Log("End pos " + endPos);
+        return endPos;
+    }
 
 
     // skal laves om til hasmap (Right (0,1))
@@ -65,7 +72,7 @@ public class DiggerAlgo
         dungeonInit(dungeonParams.tileMapSize);
 
         diggerPos = (UnityEngine.Random.Range(0, dungeonParams.tileMapSize), UnityEngine.Random.Range(0, dungeonParams.tileMapSize));
-        starPos = diggerPos;
+        startPos = diggerPos;
         diggerDir = randomValidDirection();
 
 
@@ -220,6 +227,7 @@ public class DiggerAlgo
                 if (isInDungeonSize(newPos.Item1, newPos.Item2))
                 {
                     dungeonArr[newPos.Item1, newPos.Item2] = 1;
+                    SaveTopAndBottomPointForCamera(newPos.Item1, newPos.Item2);
                 }
             }
         }
@@ -233,7 +241,10 @@ public class DiggerAlgo
         {
             diggerPos = (diggerPos.Item1 + dir.Item1, diggerPos.Item2 + dir.Item2);
             dungeonArr[diggerPos.Item1, diggerPos.Item2] = 1;
-           
+
+            SaveTopAndBottomPointForCamera(diggerPos.Item1, diggerPos.Item2);
+
+
         }
         else
         {
@@ -242,6 +253,30 @@ public class DiggerAlgo
        
     }
 
+
+
+    void SaveTopAndBottomPointForCamera(int x, int y)
+    {
+        if (x > top.x)
+        {
+            top.x = x;
+        }
+
+        if (y > top.y)
+        {
+            top.y = y;
+        }
+
+        if (x < bottom.x)
+        {
+            bottom.x = x;
+        }
+
+        if (y < bottom.y)
+        {
+            bottom.y = y;
+        }
+    }
 
     void dungeonGenerate(int steps)
     {

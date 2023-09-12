@@ -3,23 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class View : MonoBehaviour
 {
     [SerializeField] Controller controller;
     [SerializeField] DungeonTranslater translater;
+    [SerializeField] CameraSystem cameraSystem;
+    [SerializeField] Tilemap tilemap;
+    [SerializeField] TileBase tile;
 
     int tileMapSize = 10;
     int nbrOfStepsDungeons = 10;
 
-    MouseState mouseState = MouseState.EDIT;
-
-    enum MouseState
-    {
-        ERASE,
-        EDIT,
-    }
 
 
 
@@ -88,7 +85,15 @@ public class View : MonoBehaviour
         dungeonParams.DebugPrintDungeonParams();
 
         int[,] dungeonArr=controller.GenerateNewDungeon(dungeonParams);
+        cameraSystem.UpdateParameters(dungeonParams);
+        Vector3Int camSatartPos = controller.GetDungeonStartPos();
         
-        translater.UpdateDungeonLayout(dungeonArr, dungeonParams);
+        Vector3Int position = tilemap.WorldToCell(camSatartPos);
+        // use the grid insted of tilemap ? grid.WorldToCell(mouseWorldPos);
+        Debug.Log("Cam position "+ position);
+
+        cameraSystem.UpdateCameraPosition(position);
+
+        translater.UpdateDungeonLayout(dungeonArr, dungeonParams, tilemap, tile);
     }
 }

@@ -7,7 +7,7 @@ public class Controller : MonoBehaviour
 
     [SerializeField] View view;
     [SerializeField] Model model;
-    [SerializeField] CameraSystem cameraSystem;
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -20,9 +20,18 @@ public class Controller : MonoBehaviour
         
     }
 
+    public Vector3Int GetDungeonStartPos()
+    {
+        return model.GetDungeonStartPos();
+    }
+
     public int[,] GenerateNewDungeon(DungeonParams dungeonParams)
     {
-        cameraSystem.UpdateParameters(dungeonParams);
-        return model.GenerateDungeon(dungeonParams);
+        
+
+        int[,] dungeon = model.GenerateDungeon(dungeonParams);
+        
+
+        return dungeon;
     }
 }

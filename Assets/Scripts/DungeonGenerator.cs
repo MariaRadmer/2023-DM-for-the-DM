@@ -19,6 +19,15 @@ public class DungeonGenerator : MonoBehaviour
         
     }
 
+    public Vector3Int GetDungeonStartPos()
+    {
+       
+        (int,int) start = diggerAlgo.getStartPosition();
+
+        return new Vector3Int(start.Item2, start.Item2 * -1, 0);
+       
+    }
+
     public int[,] GenerateDungeon(DungeonParams dungeonParams)
     {
         int tileMapSize = dungeonParams.tileMapSize; 

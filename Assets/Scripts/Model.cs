@@ -9,6 +9,8 @@ public class Model : MonoBehaviour
    
 
     private int[,] currentDungeon;
+
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +21,11 @@ public class Model : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public Vector3Int GetDungeonStartPos()
+    {
+        return dungeonGenerator.GetDungeonStartPos();
     }
 
     public int[,] GenerateDungeon(DungeonParams dungeonParams)

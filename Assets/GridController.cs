@@ -13,6 +13,7 @@ public class GridController : MonoBehaviour
     // Should only et in the DT
     [SerializeField] private Tilemap interactiveMap = null;
     [SerializeField] private Tilemap hoverMap = null;
+    [SerializeField] private Tilemap selectMap = null;
     [SerializeField] private Tile hoverTile = null;
     [SerializeField] private RuleTile hoverRuleTile = null;
     [SerializeField] private RuleTile pathTile = null;
@@ -46,8 +47,8 @@ public class GridController : MonoBehaviour
         Vector3Int mousePos = GetMousePosition();
         if (!mousePos.Equals(previousMousePos))
         {
-            hoverMap.SetTile(previousMousePos, null); // Remove old hoverTile
-            hoverMap.SetTile(mousePos, hoverTile);
+            selectMap.SetTile(previousMousePos, null); // Remove old hoverTile
+            selectMap.SetTile(mousePos, hoverTile);
             previousMousePos = mousePos;
         }
 
@@ -56,18 +57,7 @@ public class GridController : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            
             MakeRoom(mousePos);
-            
-            
-            
-        }
-
-        // Have to have an eraser function
-        if (Input.GetMouseButton(1))
-        {
-            //interactiveMap.SetTile(mousePos, null);
-            
         }
 
         if (Input.GetMouseButtonUp(0))
@@ -87,7 +77,7 @@ public class GridController : MonoBehaviour
             }
 
             
-            Debug.Log($" Fill {startTarget} to {endTarget}");
+            
         }
 
     }
@@ -100,7 +90,7 @@ public class GridController : MonoBehaviour
     public void EraseCalled()
     {
         deleteRoom= !deleteRoom;
-        Debug.Log("Delete room bool " + deleteRoom);
+        
     }
 
 
@@ -135,11 +125,14 @@ public class GridController : MonoBehaviour
 
         }
 
+        
+
+
         if (hasChangedFillBox)
         {
-            
-            interactiveMap.BoxFill(mousePos, hoverRuleTile, startTarget.x, startTarget.y, endTarget.x, endTarget.y);
 
+            hoverMap.BoxFill(mousePos, hoverRuleTile, startTarget.x, startTarget.y, endTarget.x, endTarget.y);
+            Debug.Log($"Hover filled at {startTarget} {endTarget}");
            
         }
 
