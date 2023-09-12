@@ -23,9 +23,15 @@ public class GridController : MonoBehaviour
 
 
     private bool hasChangedFillBox = false;
+    private bool hasChangedFillBoxDelete = false;
 
     Vector3Int startTarget = Vector3Int.zero;
     Vector3Int endTarget = Vector3Int.zero;
+
+
+    private bool deleteRoom = false;
+
+
 
     void Start()
     {
@@ -50,7 +56,11 @@ public class GridController : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
+            
             MakeRoom(mousePos);
+            
+            
+            
         }
 
         // Have to have an eraser function
@@ -65,12 +75,33 @@ public class GridController : MonoBehaviour
             
             startMousePos = Vector3Int.zero;
             hoverMap.ClearAllTiles();
-            interactiveMap.BoxFill(mousePos, pathTile, startTarget.x, startTarget.y, endTarget.x, endTarget.y);
+            
+
+            if (!deleteRoom)
+            {
+                interactiveMap.BoxFill(mousePos, pathTile, startTarget.x, startTarget.y, endTarget.x, endTarget.y);
+            }
+            else
+            {
+                interactiveMap.BoxFill(mousePos, null, startTarget.x, startTarget.y, endTarget.x, endTarget.y);
+            }
+
+            
             Debug.Log($" Fill {startTarget} to {endTarget}");
         }
 
     }
 
+
+
+
+
+
+    public void EraseCalled()
+    {
+        deleteRoom= !deleteRoom;
+        Debug.Log("Delete room bool " + deleteRoom);
+    }
 
 
 
