@@ -13,4 +13,11 @@ public class DungeonParams
         this.tileMapSize = tileMapSize;
         this.nbrOfStepsDungeons = nbrOfStepsDungeons;
     }
+
+
+    public void DebugPrintDungeonParams()
+    {
+        Debug.Log($"Tile map size {tileMapSize}");
+        Debug.Log($"Number of steps {nbrOfStepsDungeons}");
+    }
 }
