@@ -107,34 +107,6 @@ public class View : MonoBehaviour
 
 
 
-    public void PrintDungeon2()
-    {
-        (Vector3Int, Vector3Int) topBottom = controller.GetTopBottom();
-
-        printCamera.enabled = true;
-
-        RenderTexture screenTexture = new RenderTexture(Screen.width, Screen.height, 16);
-        printCamera.targetTexture = screenTexture;
-        RenderTexture.active = screenTexture;
-
-        float x = (topBottom.Item1.x + topBottom.Item2.x) / 2;
-        float y = (topBottom.Item1.y + topBottom.Item2.y) / 2;
-
-        printCamera.transform.position = new Vector3(x, y, 0);
-        Debug.Log($"print cam position {printCamera.transform.position}");
-
-        printCamera.Render();
-
-        Texture2D renderedTexture = new Texture2D(Screen.width, Screen.height);
-        renderedTexture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-        RenderTexture.active = null;
-        byte[] byteArray = renderedTexture.EncodeToPNG();
-
-        string currentTime = System.DateTime.Now.ToString("MM-dd-yy (HH-mm-ss)");
-
-        printCamera.enabled = false;
-        System.IO.File.WriteAllBytes(folderPath + currentTime + ".png", byteArray);
-    }
 
 
 
