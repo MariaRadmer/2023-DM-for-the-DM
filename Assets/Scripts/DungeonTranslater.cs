@@ -41,7 +41,8 @@ public class DungeonTranslater : MonoBehaviour
     void toTilePosition(int x,int y, Tilemap tilemap, TileBase grasstile)
     {
 
-        Vector3Int pos = new Vector3Int(y, x * -1, 0);
+        //Vector3Int pos = new Vector3Int(y, x * -1, 0);
+        Vector3Int pos = new Vector3Int(x,y,0);
 
         tilemap.SetTile(pos, grasstile);
     }

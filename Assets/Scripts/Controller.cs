@@ -20,6 +20,11 @@ public class Controller : MonoBehaviour
         
     }
 
+
+    public (Vector3Int, Vector3Int) GetTopBottom()
+    {
+        return model.GetTopBottom();
+    }
     public Vector3Int GetDungeonStartPos()
     {
         return model.GetDungeonStartPos();

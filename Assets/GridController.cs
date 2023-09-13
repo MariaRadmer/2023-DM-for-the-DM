@@ -31,6 +31,7 @@ public class GridController : MonoBehaviour
 
 
     private bool deleteRoom = false;
+    private bool printMode = false;
 
 
 
@@ -40,6 +41,9 @@ public class GridController : MonoBehaviour
         grid = gameObject.GetComponent<Grid>();
 
     }
+
+
+
 
     void Update()
     {
@@ -51,6 +55,8 @@ public class GridController : MonoBehaviour
             selectMap.SetTile(mousePos, hoverTile);
             previousMousePos = mousePos;
         }
+
+
 
       
 
@@ -132,7 +138,7 @@ public class GridController : MonoBehaviour
         {
 
             hoverMap.BoxFill(mousePos, hoverRuleTile, startTarget.x, startTarget.y, endTarget.x, endTarget.y);
-            Debug.Log($"Hover filled at {startTarget} {endTarget}");
+           
            
         }
 

@@ -9,6 +9,7 @@ using Cinemachine;
 public class CameraSystem : MonoBehaviour
 {
     [SerializeField] CinemachineVirtualCamera virtualCamera;
+    
     [SerializeField] float movementSpeed = 30f;
     [SerializeField] float dragPanSpeed = 10f;
     
@@ -48,7 +49,7 @@ public class CameraSystem : MonoBehaviour
     }
 
 
-    public void UpdateCameraPosition(Vector3Int startDungeonPosition) {
+    public void UpdateCameraPosition(Vector3 startDungeonPosition) {
 
 
         transform.position = startDungeonPosition;

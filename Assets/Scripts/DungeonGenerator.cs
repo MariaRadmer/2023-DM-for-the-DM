@@ -19,13 +19,17 @@ public class DungeonGenerator : MonoBehaviour
         
     }
 
+    public (Vector3Int, Vector3Int) GetTopBottom()
+    {
+        return diggerAlgo.GetTopBottom();
+    }
+
     public Vector3Int GetDungeonStartPos()
     {
        
         (int,int) start = diggerAlgo.getStartPosition();
 
-        return new Vector3Int(start.Item2, start.Item2 * -1, 0);
-       
+        return new Vector3Int(start.Item1,start.Item2);
     }
 
     public int[,] GenerateDungeon(DungeonParams dungeonParams)

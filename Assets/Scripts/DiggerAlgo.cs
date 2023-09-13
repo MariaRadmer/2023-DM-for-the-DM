@@ -45,6 +45,11 @@ public class DiggerAlgo
         dirToXY.Add(DIRECTION.LEFT, (0, -1));
     }
 
+    public (Vector3Int, Vector3Int) GetTopBottom()
+    {
+        return (top, bottom);
+    }
+
     public (int,int) getStartPosition()
     {
         Debug.Log("End pos " + endPos);
