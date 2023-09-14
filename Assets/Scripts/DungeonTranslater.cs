@@ -38,36 +38,24 @@ public class DungeonTranslater : MonoBehaviour
   
 
 
-    void toTilePosition(int x,int y, Tilemap tilemap, TileBase grasstile)
+    void toTilePosition(Vector3Int pos, Tilemap tilemap, TileBase grasstile)
     {
-
-        //Vector3Int pos = new Vector3Int(y, x * -1, 0);
-        Vector3Int pos = new Vector3Int(x,y,0);
 
         tilemap.SetTile(pos, grasstile);
     }
 
-    public void UpdateDungeonLayout(int[,] dungeonArr, DungeonParams dungeonParams, Tilemap tilemap, TileBase grasstile)
+    public void UpdateDungeonLayout(DungeonData dungeonData, DungeonParams dungeonParams, Tilemap tilemap, TileBase grasstile)
     {
         tilemap.ClearAllTiles();
-        int width = dungeonArr.GetLength(0);
-        int height = dungeonArr.GetLength(1);
-
-
         tilemap.origin = new Vector3Int(0, 0, 0);
 
-        for (int i = 0; i < width; i++)
+
+        foreach(Vector3Int pos in dungeonData.tilePositions)
         {
-            for (int j = 0; j < height; j++)
-            {
-                if (dungeonArr[i, j] == 1)
-                {
-                    toTilePosition(i, j, tilemap, grasstile);
-
-                }
-
-            }
+            toTilePosition(pos, tilemap, grasstile);
         }
+
+
 
         
     }

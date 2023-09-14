@@ -23,34 +23,27 @@ public class DiggerAlgo
 
 
     DIRECTION diggerDir;
-    (int, int) diggerPos;
-    Dictionary<DIRECTION, (int, int)> dirToXY = new Dictionary<DIRECTION, (int, int)>();
+    Vector3Int diggerPos;
+    Dictionary<DIRECTION, Vector3Int> dirToXY = new Dictionary<DIRECTION, Vector3Int>();
 
     int[,] dungeonArr;
 
-    int dungeonID = 0;
-    int dungeonCol;
-    int dungeonRow;
+    
+    int tileMapSize = 0;
 
-    (int, int) startPos;
-    (int, int) endPos;
+    
+    Vector3Int endPos;
 
-    Vector3Int top = new Vector3Int(1,1);
-    Vector3Int bottom = new Vector3Int(1,1);
+    
 
     public DiggerAlgo() {
-        dirToXY.Add(DIRECTION.UP, (1, 0));
-        dirToXY.Add(DIRECTION.DOWN, (-1, 0));
-        dirToXY.Add(DIRECTION.RIGHT, (0, 1));
-        dirToXY.Add(DIRECTION.LEFT, (0, -1));
+        dirToXY.Add(DIRECTION.UP, new Vector3Int(1, 0,0));
+        dirToXY.Add(DIRECTION.DOWN, new Vector3Int(-1, 0,0));
+        dirToXY.Add(DIRECTION.RIGHT, new Vector3Int(0, 1,0));
+        dirToXY.Add(DIRECTION.LEFT, new Vector3Int(0, -1,0));
     }
 
-    public (Vector3Int, Vector3Int) GetTopBottom()
-    {
-        return (top, bottom);
-    }
-
-    public (int,int) getStartPosition()
+    public Vector3Int getStartPosition()
     {
         Debug.Log("End pos " + endPos);
         return endPos;
@@ -70,69 +63,44 @@ public class DiggerAlgo
 
 
 
-    public int[,] GenerateDungeon(DungeonParams dungeonParams)
+    public DungeonData GenerateDungeon(DungeonParams dungeonParams)
     {
         
 
-        dungeonInit(dungeonParams.tileMapSize);
+        DungeonData dungeonData = new DungeonData();
 
-        diggerPos = (UnityEngine.Random.Range(0, dungeonParams.tileMapSize), UnityEngine.Random.Range(0, dungeonParams.tileMapSize));
-        startPos = diggerPos;
+        diggerPos =new Vector3Int (UnityEngine.Random.Range(0, dungeonParams.tileMapSize), UnityEngine.Random.Range(0, dungeonParams.tileMapSize),0);
+        tileMapSize = dungeonParams.tileMapSize;
         diggerDir = randomValidDirection();
 
 
-        dungeonGenerate(dungeonParams.nbrOfStepsDungeons);
+        dungeonGenerate(dungeonParams.nbrOfStepsDungeons, dungeonData);
 
-        return dungeonArr;
+        return dungeonData;
     }
 
 
-
-
-
-    public void dungeonPrintToFile()
+    DIRECTION randomValidDirection()
     {
 
-        string path = Application.dataPath + "/Dungeons" + "/Dungeon" + dungeonID + ".txt";
-        StreamWriter writer = new StreamWriter(path, false);
+        List<DIRECTION> valid = validDirections();
+
+        int random = 0;
 
 
-        for (int i = 0; i < dungeonArr.GetLength(0); i++)
+
+        if (valid.Count > 1)
         {
-            for (int j = 0; j < dungeonArr.GetLength(1); j++)
-            {
-                String tmp = dungeonArr[i, j].ToString();
-                
-                writer.Write(tmp);
-            }
+            random = UnityEngine.Random.Range(0, valid.Count);
+            DIRECTION randomValidDir = valid.ToArray()[random];
 
-           
-            writer.Write("\n");
-
+            return randomValidDir;
+        }
+        else
+        {
+            return valid.ToArray()[0];
         }
 
-        writer.Close();
-        
-
-    }
-
-
-    void dungeonInit(int tilemapSize)
-    {
-        
-
-        dungeonArr = new int[tilemapSize, tilemapSize];
-        dungeonCol = dungeonArr.GetLength(0);
-        dungeonRow = dungeonArr.GetLength(1);
-
-        for (int i = 0; i < dungeonArr.GetLength(0); i++)
-        {
-            for (int j = 0; j < dungeonArr.GetLength(1); j++)
-            {
-                
-                dungeonArr[i,j] = 0;
-            }
-        }
     }
 
 
@@ -143,28 +111,23 @@ public class DiggerAlgo
 
         foreach (DIRECTION dir in allDirections)
         {
-            (int, int) dirXY = dirToXY[dir];
-            int newDirX = diggerPos.Item1 + dirXY.Item1;
-            int newDirY = diggerPos.Item2 + dirXY.Item2;
+            Vector3Int dirXY = dirToXY[dir];
+            Vector3Int newDirection = diggerPos + dirXY;
+            
 
-            if (isInDungeonSize(newDirX,newDirY))
+            if (isInDungeonSize(newDirection))
             {
-               
                 valid.Add(dir);
-                
             }
-
         }
-
-        
         return valid;
     }
 
-    bool isInDungeonSize(int x,int y)
+    bool isInDungeonSize(Vector3Int pos)
     {
-        if ((x < dungeonCol) && (y < dungeonRow))
+        if ((pos.x < tileMapSize) && (pos.y < tileMapSize))
         {
-            if ((x >= 0) && (y >= 0))
+            if ((pos.x >= 0) && (pos.y >= 0))
             {
                 return true;
             }
@@ -172,6 +135,31 @@ public class DiggerAlgo
 
         return false;
     }
+
+    void dungeonGenerate(int steps, DungeonData dungeonData)
+    {
+
+        if (steps <= 0)
+        {
+            dungeonData.endPosition = diggerPos;
+            endPos = diggerPos;
+            return;
+        }
+        else
+        {
+            Dig(dungeonData);
+            newDiggerDirection();
+            newRoom(dungeonData);
+
+            dungeonGenerate(steps - 1, dungeonData);
+        }
+    }
+
+
+
+
+
+
 
     bool validDirection(DIRECTION dirrection)
     {
@@ -187,69 +175,43 @@ public class DiggerAlgo
         return false;
     }
 
-    DIRECTION randomValidDirection()
-    {
-
-        List<DIRECTION> valid = validDirections();
-
-        int random = 0;
-
-        
-
-        if(valid.Count> 1)
-        {
-            random = UnityEngine.Random.Range(0, valid.Count);
-            DIRECTION randomValidDir = valid.ToArray()[random];
-
-            return randomValidDir;
-        }
-        else
-        {
-            return valid.ToArray()[0];
-        }
-
-        
 
 
-    }
-
-
-    void createRoom(int width, int length)
+    void createRoom(int width, int length,DungeonData dungeonData)
     {
 
         int halfWidth = (int)Math.Floor(width/2.0);
         int halfLength = (int)Math.Floor(length / 2.0);
 
-        (int, int) startPos = (diggerPos.Item1 - halfWidth, diggerPos.Item2 - halfLength);
+        Vector3Int startPos = new Vector3Int (diggerPos.x - halfWidth, diggerPos.y - halfLength);
 
 
         for(int i = 0; i < width; i++)
         {
             for (int j = 0; j < length; j++)
             {
-                (int,int) newPos = (i+ startPos.Item1, j+ startPos.Item2);
+                Vector3Int newPos = new Vector3Int (i+ startPos.x, j+ startPos.y,0);
 
-                if (isInDungeonSize(newPos.Item1, newPos.Item2))
+                if (isInDungeonSize(newPos))
                 {
-                    dungeonArr[newPos.Item1, newPos.Item2] = 1;
-                    SaveTopAndBottomPointForCamera(newPos.Item1, newPos.Item2);
+                    dungeonData.tilePositions.Add (newPos);
+                   
+                    
                 }
             }
         }
     }
 
-    void Dig()
+    void Dig(DungeonData dungeonData)
     {
-        (int,int) dir = dirToXY[diggerDir];
+        Vector3Int dir = dirToXY[diggerDir];
         
         if (validDirection(diggerDir))
         {
-            diggerPos = (diggerPos.Item1 + dir.Item1, diggerPos.Item2 + dir.Item2);
-            dungeonArr[diggerPos.Item1, diggerPos.Item2] = 1;
+            diggerPos = new Vector3Int(diggerPos.x + dir.x, diggerPos.y + dir.y,0);
+            //dungeonArr[diggerPos.Item1, diggerPos.Item2] = 1;
 
-            SaveTopAndBottomPointForCamera(diggerPos.Item1, diggerPos.Item2);
-
-
+            dungeonData.tilePositions.Add(diggerPos);
         }
         else
         {
@@ -260,48 +222,6 @@ public class DiggerAlgo
 
 
 
-    void SaveTopAndBottomPointForCamera(int x, int y)
-    {
-        if (x > top.x)
-        {
-            top.x = x;
-        }
-
-        if (y > top.y)
-        {
-            top.y = y;
-        }
-
-        if (x < bottom.x)
-        {
-            bottom.x = x;
-        }
-
-        if (y < bottom.y)
-        {
-            bottom.y = y;
-        }
-    }
-
-    void dungeonGenerate(int steps)
-    {
-
-        if(steps <= 0)
-        {
-            endPos = diggerPos;
-            return;
-        }
-        else
-        {
-            Dig();
-            newDiggerDirection();
-            newRoom();
-
-            dungeonGenerate(steps - 1);
-        }
-
-        
-    }
 
     void newDiggerDirection()
     {
@@ -317,7 +237,7 @@ public class DiggerAlgo
         }
     }
 
-    void newRoom()
+    void newRoom(DungeonData dungeonData)
     {
         int randomNbrRoom = UnityEngine.Random.Range(0, 100);
         if (randomNbrRoom < ChanceRoom)
@@ -325,7 +245,7 @@ public class DiggerAlgo
             int roomWidth = UnityEngine.Random.Range(roomWidthMin, roomWidthMax);
             int roomLength = UnityEngine.Random.Range(roomLengthMin, roomLengthMax);
 
-            createRoom(roomWidth, roomLength);
+            createRoom(roomWidth, roomLength, dungeonData);
             ChanceRoom = 0;
 
         }
@@ -335,6 +255,8 @@ public class DiggerAlgo
         }
     }
 
+
+ 
 
 }
 

@@ -90,19 +90,20 @@ public class View : MonoBehaviour
 
         dungeonParams.DebugPrintDungeonParams();
 
-        int[,] dungeonArr=controller.GenerateNewDungeon(dungeonParams);
+        DungeonData dungeonData =controller.GenerateNewDungeon(dungeonParams);
+
         cameraSystem.UpdateParameters(dungeonParams);
 
         // move cam to dungeon
-        Vector3Int camSatartPos = controller.GetDungeonStartPos();
+        Vector3Int camSatartPos = dungeonData.endPosition;
         
-        //Vector3 position = tilemap.CellToWorld(camSatartPos);
+       
         Debug.Log("Cam position "+ camSatartPos);
 
         cameraSystem.UpdateCameraPosition(camSatartPos);
 
-
-        translater.UpdateDungeonLayout(dungeonArr, dungeonParams, tilemap, tile);
+        
+        translater.UpdateDungeonLayout(dungeonData, dungeonParams, tilemap, tile);
     }
 
 

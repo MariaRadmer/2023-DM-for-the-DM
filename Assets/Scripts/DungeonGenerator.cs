@@ -19,27 +19,23 @@ public class DungeonGenerator : MonoBehaviour
         
     }
 
-    public (Vector3Int, Vector3Int) GetTopBottom()
-    {
-        return diggerAlgo.GetTopBottom();
-    }
+
 
     public Vector3Int GetDungeonStartPos()
     {
        
-        (int,int) start = diggerAlgo.getStartPosition();
 
-        return new Vector3Int(start.Item1,start.Item2);
+        return diggerAlgo.getStartPosition();
     }
 
-    public int[,] GenerateDungeon(DungeonParams dungeonParams)
+    public DungeonData GenerateDungeon(DungeonParams dungeonParams)
     {
         int tileMapSize = dungeonParams.tileMapSize; 
-        int[,] dungeonArr = diggerAlgo.GenerateDungeon(dungeonParams);
+        DungeonData dungeonData = diggerAlgo.GenerateDungeon(dungeonParams);
 
 
 
-        return dungeonArr;
+        return dungeonData;
     }
 }
 

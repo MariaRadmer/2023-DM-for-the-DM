@@ -21,22 +21,11 @@ public class Controller : MonoBehaviour
     }
 
 
-    public (Vector3Int, Vector3Int) GetTopBottom()
-    {
-        return model.GetTopBottom();
-    }
-    public Vector3Int GetDungeonStartPos()
-    {
-        return model.GetDungeonStartPos();
-    }
-
-    public int[,] GenerateNewDungeon(DungeonParams dungeonParams)
+    public DungeonData GenerateNewDungeon(DungeonParams dungeonParams)
     {
         
 
-        int[,] dungeon = model.GenerateDungeon(dungeonParams);
-        
+       return model.GenerateDungeon(dungeonParams);
 
-        return dungeon;
     }
 }
