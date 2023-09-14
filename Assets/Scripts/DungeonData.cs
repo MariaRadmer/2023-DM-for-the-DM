@@ -5,14 +5,14 @@ using UnityEngine.Tilemaps;
 
 public class DungeonData
 {
-    public List<TileBase> tiles;
+    public List<string> tiles;
     public List<Vector3Int> tilePositions;
     public Vector3Int endPosition;
 
     public DungeonData() { 
     
-        tiles = new List<TileBase>();
+        tiles = new List<string>();
         tilePositions = new List<Vector3Int>();
-        endPosition = new Vector3Int();
+        
     }
 }

@@ -25,9 +25,6 @@ public class DiggerAlgo
     DIRECTION diggerDir;
     Vector3Int diggerPos;
     Dictionary<DIRECTION, Vector3Int> dirToXY = new Dictionary<DIRECTION, Vector3Int>();
-
-    int[,] dungeonArr;
-
     
     int tileMapSize = 0;
 

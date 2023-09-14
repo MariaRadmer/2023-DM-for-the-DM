@@ -17,13 +17,15 @@ public class View : MonoBehaviour
     [SerializeField] TileBase tile;
 
     [SerializeField] Camera printCamera;
+
+    public List<CustomTile> allTiles = new List<CustomTile>();
  
 
     int tileMapSize = 10;
     int nbrOfStepsDungeons = 10;
 
     string folderPath;
-
+    string saveFolderPath;
 
 
     // Start is called before the first frame update
@@ -31,6 +33,9 @@ public class View : MonoBehaviour
     {
         folderPath = Application.dataPath + "Dungeons/";
         DirectoryInfo di = Directory.CreateDirectory(folderPath);
+
+        saveFolderPath = Application.dataPath + "Saves/";
+        DirectoryInfo saveFolder = Directory.CreateDirectory(saveFolderPath);
     }
 
     // Update is called once per frame
@@ -80,6 +85,15 @@ public class View : MonoBehaviour
 
     }
 
+    public void OnSave()
+    {
+        translater.SaveDungeon(tilemap, saveFolderPath, allTiles);
+    }
+
+    public void OnLoad()
+    {
+        translater.LoadLevel(tilemap, saveFolderPath,allTiles);
+    }
 
     public void OnClickGenerateDungeon()
     {
@@ -107,7 +121,7 @@ public class View : MonoBehaviour
     }
 
 
-
+    
 
 
 
