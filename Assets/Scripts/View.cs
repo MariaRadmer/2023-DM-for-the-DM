@@ -18,15 +18,28 @@ public class View : MonoBehaviour
 
     [SerializeField] Camera printCamera;
 
+    [SerializeField] TMP_InputField steps;
+    [SerializeField] TMP_InputField size;
+
+    [SerializeField] TMP_InputField save_input;
+    [SerializeField] TMP_InputField load_input;
+
     public List<CustomTile> allTiles = new List<CustomTile>();
  
 
     int tileMapSize = 10;
     int nbrOfStepsDungeons = 10;
 
+   
+
     string folderPath;
     string saveFolderPath;
 
+
+    const int maxValueSteps = 5000;
+    const int maxValueSize = 10000;
+
+    const int minValue = 2;
 
     // Start is called before the first frame update
     void Start()
@@ -49,17 +62,38 @@ public class View : MonoBehaviour
 
         try
         {
-           
+
             int result = Int32.Parse(input);
 
-            if (result > 10)
+            if (result >= minValue && result < maxValueSize)
+            {
+                tileMapSize = result;
+            } 
+            else if (result < minValue)  
+            {
+                tileMapSize = minValue;
+                size.text = tileMapSize.ToString();
+            } 
+            else if (result <= maxValueSize)
             {
                 tileMapSize = result;
             }
-            
+            else if (result > maxValueSize)
+            {
+                Debug.Log("Size over max ");
+                tileMapSize = maxValueSize;
+                size.text = tileMapSize.ToString();
+            }
+
+        }
+        catch (OverflowException)
+        {
+            tileMapSize = maxValueSize;
+            size.text = tileMapSize.ToString();
         }
         catch (FormatException)
         {
+            size.text = tileMapSize.ToString();
             Debug.Log($"Unable to parse '{input}'");
         }
 
@@ -72,14 +106,37 @@ public class View : MonoBehaviour
         {
             int result = Int32.Parse(input);
 
-            if (result > 10)
+
+            if (result >= minValue && result < maxValueSteps)
+            {
+                nbrOfStepsDungeons = result;
+            } 
+            else if (result <= minValue)
+            {
+                nbrOfStepsDungeons = minValue;
+                steps.text = nbrOfStepsDungeons.ToString();
+            }
+            
+            else if (result <= maxValueSteps)
             {
                 nbrOfStepsDungeons = result;
             }
+            else if (result > maxValueSteps) 
+            {
+                nbrOfStepsDungeons = maxValueSteps;
+                steps.text = nbrOfStepsDungeons.ToString();
+            }
             
+            
+        }
+        catch (OverflowException)
+        {
+            nbrOfStepsDungeons = maxValueSteps;
+            steps.text = nbrOfStepsDungeons.ToString();
         }
         catch (FormatException)
         {
+            steps.text = nbrOfStepsDungeons.ToString();
             Debug.Log($"Unable to parse '{input}'");
         }
 
@@ -87,22 +144,27 @@ public class View : MonoBehaviour
 
     public void OnSave()
     {
-        translater.SaveDungeon(tilemap, saveFolderPath, allTiles);
+        // TODO: also have the endpos, right now it is 0,0,0
+
+        Vector3Int endPos = controller.GetEndPosition();
+
+        translater.SaveDungeon(save_input.text, endPos, tilemap, saveFolderPath, allTiles);
     }
 
     public void OnLoad()
     {
-        translater.LoadLevel(tilemap, saveFolderPath,allTiles);
+        Vector3Int endPos = translater.LoadLevel(load_input.text,tilemap, saveFolderPath,allTiles);
+        cameraSystem.UpdateCameraPosition(endPos);
+
+
     }
 
     public void OnClickGenerateDungeon()
     {
         
-        
 
         DungeonParams dungeonParams = new DungeonParams(tileMapSize, nbrOfStepsDungeons);
 
-        dungeonParams.DebugPrintDungeonParams();
 
         DungeonData dungeonData =controller.GenerateNewDungeon(dungeonParams);
 
@@ -110,9 +172,7 @@ public class View : MonoBehaviour
 
         // move cam to dungeon
         Vector3Int camSatartPos = dungeonData.endPosition;
-        
-       
-        Debug.Log("Cam position "+ camSatartPos);
+      
 
         cameraSystem.UpdateCameraPosition(camSatartPos);
 

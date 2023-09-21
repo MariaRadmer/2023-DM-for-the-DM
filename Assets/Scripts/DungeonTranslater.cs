@@ -33,10 +33,11 @@ public class DungeonTranslater : MonoBehaviour
     }
 
 
-    public void SaveDungeon(Tilemap tilemap, string folderPath, List<CustomTile> allTiles)
+    public void SaveDungeon(string fileName, Vector3Int endPos, Tilemap tilemap, string folderPath, List<CustomTile> allTiles)
     {
         BoundsInt bounds = tilemap.cellBounds;
         DungeonData dungeonData = new DungeonData();
+        dungeonData.endPosition = endPos;
 
         for(int x = bounds.min.x; x < bounds.max.x;x++)
         {
@@ -56,27 +57,28 @@ public class DungeonTranslater : MonoBehaviour
 
         string json = JsonUtility.ToJson(dungeonData,true);
         //string currentTime = System.DateTime.Now.ToString("MM-dd-yy (HH-mm-ss)");
-
-        File.WriteAllText(folderPath + "test" + ".json", json);
+       
+        File.WriteAllText(folderPath + fileName + ".json", json);
 
 
     }
 
 
-    public void LoadLevel (Tilemap tilemap,string folderPath, List<CustomTile> allTiles)
+    public Vector3Int LoadLevel (string fileName, Tilemap tilemap,string folderPath, List<CustomTile> allTiles)
     {
-        string json = File.ReadAllText(folderPath + "test.json");
+        string json = File.ReadAllText(folderPath + fileName + ".json");
         DungeonData data = JsonUtility.FromJson<DungeonData>(json);
 
         tilemap.ClearAllTiles();
         for (int i = 0; i<data.tilePositions.Count; i++)
         {
-            Debug.Log("all tiles " + allTiles[0]);
+ 
             TileBase tileBase = allTiles.Find(t => t.name == data.tiles[i]).tile;
 
-            Debug.Log($"Tile base {tileBase} {tileBase.name}");
             tilemap.SetTile(data.tilePositions[i], tileBase);
         }
+
+        return data.endPosition;
     }
 
   

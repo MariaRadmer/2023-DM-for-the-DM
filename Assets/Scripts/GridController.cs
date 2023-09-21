@@ -22,6 +22,8 @@ public class GridController : MonoBehaviour
 
     private Vector3Int startMousePos = new Vector3Int();
 
+    private Vector3Int prevMousePosMakeRoom = new Vector3Int();
+
 
     private bool hasChangedFillBox = false;
     private bool hasChangedFillBoxDelete = false;
@@ -63,7 +65,9 @@ public class GridController : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
+            
             MakeRoom(mousePos);
+            
         }
 
         if (Input.GetMouseButtonUp(0))
@@ -93,17 +97,28 @@ public class GridController : MonoBehaviour
 
 
 
-    public void EraseCalled()
+    public void EraseMode()
     {
-        deleteRoom= !deleteRoom;
+        deleteRoom= true;
         
     }
+
+
+    public void PenMode()
+    {
+        deleteRoom = false;
+    }
+
 
 
 
 
     void MakeRoom(Vector3Int mousePos)
     {
+
+        // have both startMousePos and endMousePos in begining of call?
+        // then see if x or y has become smaller ?
+
         if (startMousePos == Vector3Int.zero)
         {
             startMousePos = GetMousePosition();
@@ -132,15 +147,18 @@ public class GridController : MonoBehaviour
         }
 
         
+        
+        
 
 
         if (hasChangedFillBox)
         {
-
             hoverMap.BoxFill(mousePos, hoverRuleTile, startTarget.x, startTarget.y, endTarget.x, endTarget.y);
-           
-           
         }
+        
+            
+           
+        
 
     }
 

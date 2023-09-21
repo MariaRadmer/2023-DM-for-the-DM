@@ -25,7 +25,11 @@ public class DiggerAlgo
     DIRECTION diggerDir;
     Vector3Int diggerPos;
     Dictionary<DIRECTION, Vector3Int> dirToXY = new Dictionary<DIRECTION, Vector3Int>();
-    
+
+    List<DIRECTION> allDirections = new List<DIRECTION>() { DIRECTION.UP, DIRECTION.DOWN, DIRECTION.RIGHT, DIRECTION.LEFT };
+    List<DIRECTION> valid = new List<DIRECTION>();
+
+
     int tileMapSize = 0;
 
     
@@ -80,31 +84,29 @@ public class DiggerAlgo
     DIRECTION randomValidDirection()
     {
 
-        List<DIRECTION> valid = validDirections();
+        validDirections();
 
-        int random = 0;
-
-
+       
 
         if (valid.Count > 1)
         {
-            random = UnityEngine.Random.Range(0, valid.Count);
-            DIRECTION randomValidDir = valid.ToArray()[random];
+            int random = UnityEngine.Random.Range(0, valid.Count);
+            DIRECTION randomValidDir = valid[random];
 
             return randomValidDir;
         }
         else
         {
-            return valid.ToArray()[0];
+            return valid[0];
         }
 
     }
 
 
-    List<DIRECTION> validDirections()
+    void validDirections()
     {
-        List<DIRECTION> allDirections = new List<DIRECTION>() { DIRECTION.UP, DIRECTION.DOWN, DIRECTION.RIGHT, DIRECTION.LEFT };
-        List<DIRECTION> valid = new List<DIRECTION>();
+        valid.Clear();
+
 
         foreach (DIRECTION dir in allDirections)
         {
@@ -115,9 +117,12 @@ public class DiggerAlgo
             if (isInDungeonSize(newDirection))
             {
                 valid.Add(dir);
+                
             }
         }
-        return valid;
+
+
+        
     }
 
     bool isInDungeonSize(Vector3Int pos)
@@ -160,7 +165,7 @@ public class DiggerAlgo
 
     bool validDirection(DIRECTION dirrection)
     {
-        List<DIRECTION> valid = validDirections();
+        validDirections();
 
         foreach (DIRECTION dir in valid)
         {

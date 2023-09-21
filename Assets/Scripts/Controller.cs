@@ -21,6 +21,11 @@ public class Controller : MonoBehaviour
     }
 
 
+    public Vector3Int GetEndPosition()
+    {
+        return model.GetDungeonStartPos();
+    }
+
     public DungeonData GenerateNewDungeon(DungeonParams dungeonParams)
     {
         

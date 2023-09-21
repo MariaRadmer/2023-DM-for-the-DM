@@ -51,7 +51,7 @@ public class CameraSystem : MonoBehaviour
 
     public void UpdateCameraPosition(Vector3 startDungeonPosition) {
 
-
+        Debug.Log("End pos from cam sys " + startDungeonPosition);
         transform.position = startDungeonPosition;
     }
 
